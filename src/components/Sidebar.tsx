@@ -9,7 +9,7 @@ const navItems = [
 
 const Sidebar = ({ className = "" }: { className?: string }) => {
     return (
-        <div className={`flex flex-col w-56 bg-white justify-between p-4 ${className}`}>
+        <div className={`flex flex-col w-70 bg-white justify-between p-4 ${className}`}>
             {/* Top: Logo Placeholder */}
             <div>
                 <div className="flex items-center justify-center mt-2 mb-4">
