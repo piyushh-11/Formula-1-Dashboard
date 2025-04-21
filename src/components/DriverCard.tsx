@@ -29,11 +29,11 @@ const DriverCard: React.FC<DriverCardProps> = ({ driver, drivers }) => {
   return (
     <div className="bg-white rounded-lg shadow-md shadow-gray-200 flex flex-col">
       <h2 className="text-xl font-bold text-center pt-2">Driver Info</h2>
-      <div className="w-88 h-82 self-center mt-2 relative">
+      <div className="w-88 h-82 self-center mt-2 relative rounded border border-gray-200 overflow-hidden">
         <img
           src={`/drivers/${driver}.jpeg`}
           alt={d.name}
-          className="absolute inset-0 w-full h-full object-cover rounded"
+          className="absolute inset-0 w-full h-full object-cover"
         />
       </div>
       <div className="flex items-center justify-between py-2 px-4">

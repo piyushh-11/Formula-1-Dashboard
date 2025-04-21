@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import Sidebar from '../components/Sidebar'
-import { fetchSeasons, fetchRaces, fetchDrivers } from '../utils/api'
+import { fetchSeasons, fetchRaces, fetchDrivers, fetchLapTimes } from '../utils/api'
 import DriverCard from '../components/DriverCard'
 import LapChart from '../components/LapChart'
 import RaceSelector from '../components/RaceSelector'
@@ -15,6 +15,7 @@ const Dashboard = () => {
   const [race, setRace] = useState<string>('')
   const [drivers, setDrivers] = useState<{ code: string, name: string, number?: string, nationality?: string }[]>([])
   const [driver, setDriver] = useState<string>('')
+  const [lapTimes, setLapTimes] = useState<{ lap: number; times: { position: string; time: string }[] }[]>([])
 
   useEffect(() => {
     fetchSeasons().then(setSeasons)
@@ -44,6 +45,14 @@ const Dashboard = () => {
     setDriver('')
   }, [season, race])
 
+  useEffect(() => {
+    if (!season || !race || !driver) {
+      setLapTimes([])
+      return
+    }
+    fetchLapTimes(season, race, driver).then(setLapTimes)
+  }, [season, race, driver])
+
   return (
     <div className="flex h-screen bg-gray-100">
       <Sidebar />
@@ -65,14 +74,14 @@ const Dashboard = () => {
           {/* Main Content: 2 columns */}
           <div className="grid grid-cols-3 gap-4 px-6 pb-6 flex-1">
             <DriverCard driver={driver} drivers={drivers} />
-            <LapChart />
+            <LapChart lapTimes={lapTimes} />
           </div>
 
           {/* Bottom Content: 3 columns */}
           <div className="grid grid-cols-3 gap-4 px-6 pb-6 flex-1">
             <RaceSummary />
             <Statistics />
-            <TrackInfo />
+            <TrackInfo season={season} round={race} />
           </div>
         </div>
       </div>

@@ -33,12 +33,13 @@ export async function fetchDrivers(season: string, round: string): Promise<{ cod
 }
 
 // Fetch track info (name, city, country) for a given season and round
-export async function fetchTrackInfo(season: string, round: string): Promise<{ name: string, city: string, country: string } | null> {
+export async function fetchTrackInfo(season: string, round: string): Promise<{ circuitId: string, name: string, city: string, country: string } | null> {
     const res = await fetch(`https://ergast.com/api/f1/${season}/${round}.json`);
     const data = await res.json();
     const race = data.MRData.RaceTable.Races[0];
     if (!race || !race.Circuit) return null;
     return {
+        circuitId: race.Circuit.circuitId,
         name: race.Circuit.circuitName,
         city: race.Circuit.Location.locality,
         country: race.Circuit.Location.country
