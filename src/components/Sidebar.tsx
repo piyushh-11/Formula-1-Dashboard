@@ -3,8 +3,6 @@ import Logo from '../assets/f1_logo.png'
 
 const navItems = [
     { to: '/dashboard', label: 'Dashboard' },
-    { to: '/compare', label: 'Compare' },
-    { to: '/about', label: 'About' },
 ]
 
 const Sidebar = ({ className = "" }: { className?: string }) => {

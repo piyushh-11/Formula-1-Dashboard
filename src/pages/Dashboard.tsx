@@ -79,8 +79,8 @@ const Dashboard = () => {
 
           {/* Bottom Content: 3 columns */}
           <div className="grid grid-cols-3 gap-4 px-6 pb-6 flex-1">
-            <RaceSummary />
-            <Statistics />
+            <RaceSummary season={season} race={race} currentDriverId={driver} />
+            <Statistics lapTimes={lapTimes} />
             <TrackInfo season={season} round={race} />
           </div>
         </div>

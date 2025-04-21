@@ -63,7 +63,7 @@ export async function fetchLapTimes(season: string, round: string, driverId: str
     );
 }
 // Fetch final race standings and times for a given season and round
-export async function fetchRaceStandings(season: string, round: string): Promise< {position: string; name: string; time: string | null }[]> {
+export async function fetchRaceStandings(season: string, round: string): Promise< {position: string; name: string; time: string | null; code?: string }[]> {
     const res = await fetch(
         `https://ergast.com/api/f1/${season}/${round}/results.json`
     );
@@ -73,5 +73,6 @@ export async function fetchRaceStandings(season: string, round: string): Promise
         position: r.position,
         name: `${r.Driver.givenName} ${r.Driver.familyName}`,
         time: r.Time?.time || null,
+        code: r.Driver.driverId,
     }));
 }
