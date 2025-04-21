@@ -8,15 +8,28 @@ interface TrackInfoProps {
 
 const TrackInfo: React.FC<TrackInfoProps> = ({ season, round }) => {
   const [track, setTrack] = useState<{ circuitId: string, name: string; city: string; country: string } | null>(null)
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
     async function loadTrack() {
       if (!season || !round) {
         setTrack(null)
+        setError(null)
         return
       }
-      const info = await fetchTrackInfo(season, round)
-      setTrack(info)
+      setLoading(true)
+      setError(null)
+      try {
+        const info = await fetchTrackInfo(season, round)
+        setTrack(info)
+        if (!info) setError("No track info available.")
+      } catch (e) {
+        setError("Failed to load track info.")
+        setTrack(null)
+      } finally {
+        setLoading(false)
+      }
     }
     loadTrack()
   }, [season, round])
@@ -24,7 +37,11 @@ const TrackInfo: React.FC<TrackInfoProps> = ({ season, round }) => {
   return (
     <div className="bg-white rounded-lg shadow-md shadow-gray-200 p-2 flex flex-col">
       <h2 className="text-xl font-bold text-center">Track Info</h2>
-      {track ? (
+      {loading ? (
+        <div className="text-center text-muted-foreground py-8">Loading...</div>
+      ) : error ? (
+        <div className="text-center text-muted-foreground py-8">{error}</div>
+      ) : track ? (
         <>
           <div className="p-2">
             <div className="font-semibold">{track.name}</div>
@@ -37,7 +54,7 @@ const TrackInfo: React.FC<TrackInfoProps> = ({ season, round }) => {
           />
         </>
       ) : (
-        <div className="text-center text-gray-500"></div>
+        <div className="text-center text-muted-foreground py-8">No track info available.</div>
       )}
     </div>
   )

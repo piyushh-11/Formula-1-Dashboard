@@ -41,7 +41,9 @@ const LapChart: React.FC<LapChartProps> = ({ lapTimes }) => {
         </CardTitle>
       </CardHeader>
       <CardContent className="sm:px-4">
-        {chartData.length === 0 ? (
+        {lapTimes === null ? (
+          <div className="text-center text-muted-foreground py-12">Failed to load lap times.</div>
+        ) : chartData.length === 0 ? (
           <div className="text-center text-muted-foreground py-12">No lap times available.</div>
         ) : (
           <ChartContainer

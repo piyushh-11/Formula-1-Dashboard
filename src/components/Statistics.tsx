@@ -45,7 +45,9 @@ const Statistics: React.FC<LapChartProps> = ({ lapTimes }) => {
   return (
     <div className="bg-white rounded-lg shadow-md shadow-gray-200 p-2 flex flex-col w-full h-full">
       <h2 className="text-xl font-bold text-center mb-3">Race Statistics</h2>
-      {stats ? (
+      {lapTimes === null ? (
+        <div className="text-center text-muted-foreground py-8">Failed to load lap times.</div>
+      ) : stats ? (
         <table className="mx-2 mb-2 text-sm rounded shadow-sm overflow-hidden">
           <thead>
             <tr className="bg-gray-300">

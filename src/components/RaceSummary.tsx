@@ -11,13 +11,24 @@ const RaceSummary: React.FC<RaceSummaryProps> = ({ season, race, currentDriverId
   const [standings, setStandings] = useState<
     { position: string; name: string; time: string | null; code?: string }[]
   >([])
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
     if (!season || !race) {
       setStandings([])
+      setError(null)
       return
     }
-    fetchRaceStandings(season, race).then((data) => setStandings(data))
+    setLoading(true)
+    setError(null)
+    fetchRaceStandings(season, race)
+      .then((data) => {
+        setStandings(data)
+        if (!data || data.length === 0) setError("No race standings available.")
+      })
+      .catch(() => setError("Failed to load race standings."))
+      .finally(() => setLoading(false))
   }, [season, race])
 
   // Find the current driver in the standings
@@ -47,7 +58,11 @@ const RaceSummary: React.FC<RaceSummaryProps> = ({ season, race, currentDriverId
   return (
     <div className="bg-white rounded-lg shadow-md shadow-gray-200 p-2 flex flex-col w-full h-full">
       <h2 className="text-xl font-bold text-center mb-3">Final Standings</h2>
-      {displayStandings.length > 0 ? (
+      {loading ? (
+        <div className="text-center text-muted-foreground py-8">Loading...</div>
+      ) : error ? (
+        <div className="text-center text-muted-foreground py-8">{error}</div>
+      ) : displayStandings.length > 0 ? (
         <table className="mx-2 mb-2 text-sm rounded shadow-sm overflow-hidden">
           <thead>
             <tr className="bg-gray-300">

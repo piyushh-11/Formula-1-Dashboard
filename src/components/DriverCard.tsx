@@ -17,13 +17,19 @@ const DriverCard: React.FC<DriverCardProps> = ({ driver, drivers }) => {
     return (
       <div className="bg-white rounded-lg shadow-md shadow-gray-200 p-2 flex flex-col h-full">
         <h2 className="text-xl font-bold text-center">Driver Info</h2>
+        <div className="text-center text-muted-foreground py-8">No driver selected.</div>
       </div>
     )
   }
 
   const d = drivers.find(d => d.code === driver)
   if (!d) {
-    return null
+    return (
+      <div className="bg-white rounded-lg shadow-md shadow-gray-200 p-2 flex flex-col h-full">
+        <h2 className="text-xl font-bold text-center">Driver Info</h2>
+        <div className="text-center text-muted-foreground py-8">Driver not found or data unavailable.</div>
+      </div>
+    )
   }
 
   return (
