@@ -4,6 +4,7 @@ type LapChartProps = {
   lapTimes: { lap: number; times: { position: string; time: string }[] }[]
 }
 
+// Converts a lap time string to seconds as a number
 function timeStringToSeconds(time: string): number {
   const parts = time.split(":")
   if (parts.length === 2) {
@@ -13,20 +14,23 @@ function timeStringToSeconds(time: string): number {
   return parseFloat(parts[0])
 }
 
+// Computes statistics (fastest, slowest, average, median, std) from an array of lap times in seconds
 function computeStats(times: number[]) {
   if (times.length === 0) return null
-  const sorted = [...times].sort((a, b) => a - b)
-  const sum = times.reduce((a, b) => a + b, 0)
-  const avg = sum / times.length
+  const sorted = [...times].sort((a, b) => a - b) // Sort times ascending
+  const sum = times.reduce((a, b) => a + b, 0) // Sum of all times
+  const avg = sum / times.length // Average lap time
+  // Median calculation: average of two middle values if even, else middle value
   const median =
     times.length % 2 === 0
       ? (sorted[times.length / 2 - 1] + sorted[times.length / 2]) / 2
       : sorted[Math.floor(times.length / 2)]
+  // Standard deviation calculation
   const std =
     Math.sqrt(times.reduce((acc, t) => acc + Math.pow(t - avg, 2), 0) / times.length)
   return {
-    fastest: sorted[0],
-    slowest: sorted[sorted.length - 1],
+    fastest: sorted[0], // Minimum lap time
+    slowest: sorted[sorted.length - 1], // Maximum lap time
     average: avg,
     median,
     std,

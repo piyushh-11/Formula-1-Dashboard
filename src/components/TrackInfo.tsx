@@ -11,6 +11,7 @@ const TrackInfo: React.FC<TrackInfoProps> = ({ season, round }) => {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
+  // Loads track information for the specified season and round.
   useEffect(() => {
     async function loadTrack() {
       if (!season || !round) {

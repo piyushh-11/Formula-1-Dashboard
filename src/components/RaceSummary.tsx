@@ -14,6 +14,7 @@ const RaceSummary: React.FC<RaceSummaryProps> = ({ season, race, currentDriverId
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
+  // Fetch race standings when season or race changes
   useEffect(() => {
     if (!season || !race) {
       setStandings([])

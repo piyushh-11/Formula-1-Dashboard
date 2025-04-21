@@ -17,10 +17,12 @@ const Dashboard = () => {
   const [driver, setDriver] = useState<string>('')
   const [lapTimes, setLapTimes] = useState<{ lap: number; times: { position: string; time: string }[] }[]>([])
 
+  // Fetch available seasons on initial mount
   useEffect(() => {
     fetchSeasons().then(setSeasons)
   }, [])
 
+  // When season changes, fetch races for that season and reset dependent state
   useEffect(() => {
     if (!season) {
       setRaces([])
@@ -35,6 +37,7 @@ const Dashboard = () => {
     setDriver('')
   }, [season])
 
+  // When season or race changes, fetch drivers for that race and reset driver state
   useEffect(() => {
     if (!season || !race) {
       setDrivers([])
@@ -45,6 +48,7 @@ const Dashboard = () => {
     setDriver('')
   }, [season, race])
 
+  // When season, race, or driver changes, fetch lap times for the selected driver
   useEffect(() => {
     if (!season || !race || !driver) {
       setLapTimes([])

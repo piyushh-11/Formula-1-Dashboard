@@ -7,8 +7,13 @@ type LapChartProps = {
   lapTimes: { lap: number; times: { position: string; time: string }[] }[]
 }
 
+const chartConfig = {
+  lap: { label: "Lap" },
+  time: { label: "Lap Time (s)", color: "hsl(var(--chart-1))" }
+} satisfies ChartConfig
+
+// Converts a lap time string to seconds as a number
 function timeStringToSeconds(time: string): number {
-  // Format: "1:23.456" or "59.123"
   const parts = time.split(":")
   if (parts.length === 2) {
     const [min, sec] = parts
@@ -17,22 +22,18 @@ function timeStringToSeconds(time: string): number {
   return parseFloat(parts[0])
 }
 
-const chartConfig = {
-  lap: { label: "Lap" },
-  time: { label: "Lap Time (s)", color: "hsl(var(--chart-1))" }
-} satisfies ChartConfig
-
+// LapChart component receives lapTimes as a prop
 const LapChart: React.FC<LapChartProps> = ({ lapTimes }) => {
+  // Memoize chart data to avoid unnecessary recalculations
   const chartData = useMemo(() => {
-    // Use the first timing per lap (should be the selected driver)
+    // Map each lap to an object with lap number, lap time in seconds, and original time string
     return lapTimes.map(lap => ({
       lap: lap.lap,
-      time: lap.times[0]?.time ? timeStringToSeconds(lap.times[0].time) : null,
-      timeStr: lap.times[0]?.time || "",
-    })).filter(d => d.time !== null)
+      time: lap.times[0]?.time ? timeStringToSeconds(lap.times[0].time) : null, // Convert first driver's time to seconds
+      timeStr: lap.times[0]?.time || "", // Store original time string
+    })).filter(d => d.time !== null) // Filter out laps with missing time
   }, [lapTimes])
 
-  // For tooltip, show the original time string
   return (
     <Card className="bg-white rounded-lg shadow-md shadow-gray-200 flex flex-col col-span-2">
       <CardHeader className="flex flex-col items-center mt-[-10px]">
